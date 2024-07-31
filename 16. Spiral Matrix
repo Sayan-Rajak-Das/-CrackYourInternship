@@ -1,0 +1,50 @@
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        if (matrix.empty() || matrix[0].empty()) return {}; 
+
+        int m = matrix.size();
+        int n = matrix[0].size();
+
+        vector<int> ans;
+
+        int top = 0;
+        int left = 0;
+        int down = m - 1;
+        int right = n - 1;
+
+        while (top <= down && left <= right) {
+            // Traverse from left to right
+            for (int i = left; i <= right; i++) {
+                ans.push_back(matrix[top][i]);
+            }
+            top++;
+
+            // Traverse from top to bottom
+            for (int i = top; i <= down; i++) {
+                ans.push_back(matrix[i][right]);
+            }
+            right--;
+
+            // Check if we still need to traverse bottom to top
+            if (top <= down) {
+                // Traverse from right to left
+                for (int i = right; i >= left; i--) {
+                    ans.push_back(matrix[down][i]);
+                }
+                down--;
+            }
+
+            // Check if we still need to traverse top to bottom
+            if (left <= right) {
+                // Traverse from bottom to top
+                for (int i = down; i >= top; i--) {
+                    ans.push_back(matrix[i][left]);
+                }
+                left++;
+            }
+        }
+
+        return ans;
+    }
+};
