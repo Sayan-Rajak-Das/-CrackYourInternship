@@ -1,0 +1,23 @@
+class Solution {
+public:
+    void findSubarrays(vector<int>& nums, int start, int currentSum, int k, int& count) {
+        if (start == nums.size()) return;
+        
+        currentSum = 0;
+        
+        // Iterate through all possible subarrays starting from 'start'
+        for (int i = start; i < nums.size(); ++i) {
+            currentSum += nums[i];
+            if (currentSum == k) count++;
+        }
+        
+        // Continue with the next starting index
+        findSubarrays(nums, start + 1, 0, k, count);
+    }
+
+    int subarraySum(vector<int>& nums, int k) {
+        int count = 0;
+        findSubarrays(nums, 0, 0, k, count);
+        return count;
+    }
+};
