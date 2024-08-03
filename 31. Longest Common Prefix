@@ -1,0 +1,48 @@
+#include <vector>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+class Solution {
+public:
+    string longestCommonPrefix(vector<string>& strs) {
+        string ans = "";
+
+        int count = 0;
+        
+        if (strs.empty()) {
+            return ans;
+        }
+
+        int minLen = strs[0].size();
+
+        for (int i = 0; i < strs.size(); i++) {
+            minLen = min(minLen, static_cast<int>(strs[i].size()));
+        }
+        
+        for (int i = 0; i < minLen; i++) {
+            bool flag = true;
+            char temp = strs[0][i];
+
+            for (int j = 0; j < strs.size(); j++) { 
+                if (strs[j][i] != temp) {
+                    flag = false;
+                    break; 
+                }
+            }
+
+            if (flag) {
+                count++;
+            } else {
+                break;
+            }
+        }
+
+        for (int i = 0; i < count; i++) {
+            ans = ans + strs[0][i];
+        }
+
+        return ans;
+    }
+};
