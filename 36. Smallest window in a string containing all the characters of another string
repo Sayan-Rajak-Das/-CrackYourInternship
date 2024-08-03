@@ -1,0 +1,50 @@
+// -- Question from GeeksforGeeks --
+
+class Solution {
+public:
+    string smallestWindow(string s, string p) {
+        if (p.size() > s.size()) return "-1";
+
+        vector<int> pattern_count(128, 0);
+        for (char c : p) {
+            pattern_count[c]++;
+        }
+
+        int required_chars = p.size();
+        int formed_chars = 0;
+        vector<int> window_count(128, 0);
+
+        int start = 0, end = 0;
+        int min_len = INT_MAX;
+        int min_start = 0;
+
+        while (end < s.size()) {
+            char c = s[end];
+            window_count[c]++;
+
+            if (pattern_count[c] != 0 && window_count[c] <= pattern_count[c]) {
+                formed_chars++;
+            }
+
+            while (start <= end && formed_chars == required_chars) {
+                c = s[start];
+
+                if (end - start + 1 < min_len) {
+                    min_len = end - start + 1;
+                    min_start = start;
+                }
+
+                window_count[c]--;
+                if (pattern_count[c] != 0 && window_count[c] < pattern_count[c]) {
+                    formed_chars--;
+                }
+
+                start++;
+            }
+
+            end++;
+        }
+
+        return (min_len == INT_MAX) ? "-1" : s.substr(min_start, min_len);
+    }
+};
