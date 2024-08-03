@@ -1,0 +1,37 @@
+// -- Question from GeeksforGeeks --
+
+public:
+    int solveWordWrap(vector<int>& nums, int k) {
+        int n = nums.size();
+        vector<vector<int>> cost(n, vector<int>(n, INT_MAX));
+        vector<int> dp(n, INT_MAX);
+
+        // Precompute cost for all possible lines
+        for (int i = 0; i < n; ++i) {
+            int width = -1; // Initialize width with -1 to account for leading space
+            for (int j = i; j < n; ++j) {
+                width += nums[j] + 1; // Add word length and space
+                if (width > k) break; // If line width exceeds k, break
+                if (j == n - 1) {
+                    cost[i][j] = 0; // No extra spaces in the last line
+                } else {
+                    cost[i][j] = (k - width) * (k - width); // Calculate cost
+                }
+            }
+        }
+
+        // Fill dp array
+        for (int i = 0; i < n; ++i) {
+            if (cost[0][i] != INT_MAX) {
+                dp[i] = cost[0][i];
+            }
+            for (int j = 1; j <= i; ++j) {
+                if (cost[j][i] != INT_MAX) {
+                    dp[i] = min(dp[i], dp[j - 1] + cost[j][i]);
+                }
+            }
+        }
+
+        return dp[n - 1];
+    }
+};
