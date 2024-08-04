@@ -1,0 +1,43 @@
+class Solution {
+public:
+    int calculate(string s) {
+        stack<int> st;
+        int number = 0;
+        char op = '+';
+        int result = 0;
+        
+        for (int i = 0; i < s.length(); ++i) {
+            char c = s[i];
+            
+            if (isdigit(c)) {
+                number = number * 10 + (c - '0');
+            }
+            
+            // If current char is an operator or we are at the end of the string
+            if (!isdigit(c) && !isspace(c) || i == s.length() - 1) {
+                if (op == '+') {
+                    st.push(number);
+                } else if (op == '-') {
+                    st.push(-number);
+                } else if (op == '*') {
+                    int top = st.top();
+                    st.pop();
+                    st.push(top * number);
+                } else if (op == '/') {
+                    int top = st.top();
+                    st.pop();
+                    st.push(top / number);
+                }
+                op = c;
+                number = 0;
+            }
+        }
+        
+        while (!st.empty()) {
+            result += st.top();
+            st.pop();
+        }
+        
+        return result;
+    }
+};
