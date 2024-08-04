@@ -1,0 +1,26 @@
+// -- Question from GeeksforGeeks --
+
+class Solution{
+  public:
+    vector<vector<string> > Anagrams(vector<string>& string_list) {
+        
+        unordered_map<string, vector<string>> mp;
+        
+        for(string str : string_list){
+            string sorted_str = str;
+            
+            sort(sorted_str.begin(), sorted_str.end());
+            
+            mp[sorted_str].push_back(str);
+        }
+        
+        vector<vector<string>> result;
+        
+        for(auto it : mp){
+            result.push_back(it.second);
+        }
+        
+        sort(result.begin(), result.end());
+        return result;
+    }
+};
