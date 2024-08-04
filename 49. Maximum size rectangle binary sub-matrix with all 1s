@@ -1,0 +1,54 @@
+// -- Question from GeeksforGeeks --
+
+#define MAX 1000
+
+using namespace std;
+
+class Solution{
+public:
+    int maxHistogramArea(vector<int>& heights) {
+        stack<int> s;
+        int max_area = 0;
+        int i = 0;
+        
+        while (i < heights.size()) {
+            if (s.empty() || heights[i] >= heights[s.top()]) {
+                s.push(i++);
+            } else {
+                int h = heights[s.top()];
+                s.pop();
+                int width = s.empty() ? i : i - s.top() - 1;
+                max_area = max(max_area, h * width);
+            }
+        }
+        
+        while (!s.empty()) {
+            int h = heights[s.top()];
+            s.pop();
+            int width = s.empty() ? i : i - s.top() - 1;
+            max_area = max(max_area, h * width);
+        }
+        
+        return max_area;
+    }
+
+    int maxArea(int M[MAX][MAX], int n, int m) {
+        // Convert each row into a histogram and calculate the maximum area
+        vector<int> heights(m, 0);
+        int max_area = 0;
+        
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                if (M[i][j] == 0) {
+                    heights[j] = 0;
+                } else {
+                    heights[j] += 1;
+                }
+            }
+            // Calculate the maximum area for the current histogram
+            max_area = max(max_area, maxHistogramArea(heights));
+        }
+        
+        return max_area;
+    }
+};
