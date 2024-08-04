@@ -1,0 +1,38 @@
+class Solution {
+public:
+    int numDistinct(string s, string t) {
+        int m = s.size();
+        int n = t.size();
+        
+        // Create a 2D array for memoization
+        vector<vector<int>> memo(m + 1, vector<int>(n + 1, -1));
+        
+        return dp(s, t, m, n, memo);
+    }
+
+private:
+    int dp(const string& s, const string& t, int i, int j, vector<vector<int>>& memo) {
+    
+        if (j == 0) {
+            return 1;
+        }
+
+        if (i == 0) {
+            return 0;
+        }
+
+        if (memo[i][j] != -1) {
+            return memo[i][j];
+        }
+        
+        // If the characters match, we can either take this character or not take it
+        if (s[i - 1] == t[j - 1]) {
+            memo[i][j] = dp(s, t, i - 1, j - 1, memo) + dp(s, t, i - 1, j, memo);
+        } else {
+            // If the characters do not match, we can only skip the current character of s
+            memo[i][j] = dp(s, t, i - 1, j, memo);
+        }
+        
+        return memo[i][j];
+    }
+};
