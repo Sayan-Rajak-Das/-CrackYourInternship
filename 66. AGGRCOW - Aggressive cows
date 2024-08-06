@@ -1,0 +1,37 @@
+// -- Question from Sphere Online Judge (SPOJ.com) --
+
+// Function to check if it is possible to place cows with at least 'distance' apart
+bool isFeasible(const vector<int>& stalls, int n, int c, int distance) {
+    int count = 1; // Place the first cow in the first stall
+    int last_position = stalls[0]; // Position of the last placed cow
+
+    for (int i = 1; i < n; i++) {
+        if (stalls[i] - last_position >= distance) {
+            count++; // Place a cow here
+            last_position = stalls[i]; // Update the last position
+            if (count == c) return true; // All cows are placed successfully
+        }
+    }
+    return false; // Not possible to place all cows with at least 'distance' apart
+}
+
+int largestMinDistance(int n, int c, vector<int>& stalls) {
+    sort(stalls.begin(), stalls.end()); 
+
+    int left = 0; 
+    int right = stalls[n-1] - stalls[0]; 
+    int result = 0;
+
+    // Binary search on the possible distances
+    while (left <= right) {
+        int mid = left + (right - left) / 2; 
+
+        if (isFeasible(stalls, n, c, mid)) {
+            result = mid; 
+            left = mid + 1; 
+        } else {
+            right = mid - 1; 
+        }
+    }
+    return result; // Largest minimum distance
+}
