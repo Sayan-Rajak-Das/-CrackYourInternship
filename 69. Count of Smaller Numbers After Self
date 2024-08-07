@@ -1,0 +1,37 @@
+class Solution {
+public:
+    vector<int> countSmaller(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> ans(n);
+        vector<int> sorted_nums = nums; 
+        sort(sorted_nums.begin(), sorted_nums.end()); 
+
+        // Binary Indexed Tree
+        vector<int> BIT(n + 1, 0);
+
+        // Function to update the BIT
+        auto update = [&](int index, int value) {
+            for (; index < BIT.size(); index += index & -index) {
+                BIT[index] += value;
+            }
+        };
+
+        // Function to get the prefix sum from the BIT
+        auto query = [&](int index) {
+            int sum = 0;
+            for (; index > 0; index -= index & -index) {
+                sum += BIT[index];
+            }
+            return sum;
+        };
+
+        // Iterate from right to left
+        for (int i = n - 1; i >= 0; --i) {
+            int pos = lower_bound(sorted_nums.begin(), sorted_nums.end(), nums[i]) - sorted_nums.begin() + 1;
+            ans[i] = query(pos - 1); // Count of elements smaller than nums[i]
+            update(pos, 1); // Insert current element into BIT
+        }
+
+        return ans;
+    }
+};
