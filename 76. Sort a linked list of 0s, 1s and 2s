@@ -1,0 +1,37 @@
+// -- Question from GeeksforGeeks --
+
+class Solution {
+public:
+    ListNode* insertionSortList(ListNode* head) {
+        if (!head) {
+            return head;
+        }
+
+        // Initialize a new sorted (dummy) list
+        ListNode dummy(0);
+        dummy.next = head;
+        ListNode* current = head->next;
+        head->next = nullptr;
+
+        while (current) {
+            ListNode* nextNode = current->next;
+            ListNode* prev = &dummy;
+            ListNode* sorted = dummy.next;
+
+            // Find the right place to insert the current node
+            while (sorted && sorted->val < current->val) {
+                prev = sorted;
+                sorted = sorted->next;
+            }
+
+            // Insert the current node into the sorted list
+            prev->next = current;
+            current->next = sorted;
+
+            // Move to the next node
+            current = nextNode;
+        }
+
+        return dummy.next;
+    }
+};
