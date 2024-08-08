@@ -1,0 +1,56 @@
+// -- Question from GeeksforGeeks --
+
+class Solution
+{
+    public:
+    Node *compute(Node *head)
+    {
+        // Step 1: Reverse the linked list
+       
+        Node* prev = nullptr;
+        Node* curr = head;
+        Node* next = nullptr;
+        
+        while(curr != nullptr){
+            next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+        }
+        
+         
+        // Step 2: Traverse the reversed list and remove nodes that have a greater node on their left
+        
+        Node* maxNode = prev;
+        head = prev;
+        curr = prev->next;
+        
+        while(curr != nullptr){
+            
+            if(curr->data < maxNode->data){
+                maxNode->next = curr->next;
+            } else {
+                maxNode = curr;
+            }
+            
+            curr = curr->next;
+        }
+        
+        
+        // Step 3: Reverse the list again to restore the original order with the required nodes removed
+        
+        prev = nullptr;
+        curr = head;
+        next = nullptr;
+        
+        while(curr != nullptr){
+            next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+        }
+        
+        
+        return prev;
+    }
+};
