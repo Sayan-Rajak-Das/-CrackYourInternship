@@ -1,0 +1,44 @@
+class Solution {
+public:
+    Node* flatten(Node* head) {
+        if (!head) return nullptr;
+
+        Node* curr = head;
+
+        while (curr) {
+            if (!curr->child) {
+                // If there's no child, just move to the next node
+                curr = curr->next;
+            } else {
+                // If there is a child, we need to flatten the child list
+                Node* child = curr->child;
+                Node* next = curr->next;
+
+                // Flatten the child list recursively
+                Node* childFlattened = flatten(child);
+
+                // Attach the child list to the current node
+                curr->next = childFlattened;
+                childFlattened->prev = curr;
+                curr->child = nullptr;
+
+                // Find the tail of the flattened child list
+                Node* childTail = childFlattened;
+                while (childTail->next) {
+                    childTail = childTail->next;
+                }
+
+                // Reconnect the tail of the child list with the next node in the main list
+                if (next) {
+                    childTail->next = next;
+                    next->prev = childTail;
+                }
+
+                // Move to the next node (which was originally the child)
+                curr = next;
+            }
+        }
+
+        return head;
+    }
+};
