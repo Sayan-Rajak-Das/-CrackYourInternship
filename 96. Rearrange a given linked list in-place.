@@ -1,0 +1,72 @@
+// -- Question from GeeksGeeks --
+
+#include <iostream>
+using namespace std;
+
+/* A node of the singly linked list */
+class Node {
+public:
+    int data;
+    Node *next;
+    Node(int d) {
+        data = d;
+        next = nullptr;
+    }
+};
+
+/* Function to find the middle of the linked list */
+Node* findMiddle(Node* head) {
+    Node* slow = head;
+    Node* fast = head;
+    
+    while (fast != nullptr && fast->next != nullptr) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    return slow;
+}
+
+/* Function to reverse a linked list */
+Node* reverseList(Node* head) {
+    Node* prev = nullptr;
+    Node* curr = head;
+    Node* next = nullptr;
+    
+    while (curr != nullptr) {
+        next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+    return prev;
+}
+
+/* Function to merge two linked lists */
+void mergeLists(Node* first, Node* second) {
+    while (second != nullptr) {
+        Node* temp1 = first->next;
+        Node* temp2 = second->next;
+        
+        first->next = second;
+        second->next = temp1;
+        
+        first = temp1;
+        second = temp2;
+    }
+}
+
+/* Function to rearrange the linked list */
+void rearrangeList(Node** head_ref) {
+    if (*head_ref == nullptr || (*head_ref)->next == nullptr) return;
+
+    // Step 1: Find the middle of the linked list
+    Node* middle = findMiddle(*head_ref);
+    
+    // Step 2: Reverse the second half of the list
+    Node* second = reverseList(middle->next);
+    middle->next = nullptr; // Break the list into two halves
+    
+    // Step 3: Merge the two halves
+    Node* first = *head_ref;
+    mergeLists(first, second);
+}
