@@ -1,0 +1,59 @@
+// -- Question from GeeksGeeks --
+
+#include <iostream>
+using namespace std;
+
+/* A node of the singly linked list */
+class Node {
+public:
+    int data;
+    Node *next;
+    Node(int d) {
+        data = d;
+        next = nullptr;
+    }
+};
+
+/* Function to segregate even and odd nodes in a linked list */
+void segregateEvenOdd(Node **head_ref) {
+    Node *evenStart = nullptr; // Start node of even list
+    Node *evenEnd = nullptr;   // End node of even list
+    Node *oddStart = nullptr;  // Start node of odd list
+    Node *oddEnd = nullptr;    // End node of odd list
+    Node *currentNode = *head_ref;
+
+    while (currentNode != nullptr) {
+        int val = currentNode->data;
+
+        if (val % 2 == 0) { // Even node
+            if (evenStart == nullptr) {
+                evenStart = currentNode;
+                evenEnd = evenStart;
+            } else {
+                evenEnd->next = currentNode;
+                evenEnd = evenEnd->next;
+            }
+        } else { // Odd node
+            if (oddStart == nullptr) {
+                oddStart = currentNode;
+                oddEnd = oddStart;
+            } else {
+                oddEnd->next = currentNode;
+                oddEnd = oddEnd->next;
+            }
+        }
+        currentNode = currentNode->next;
+    }
+
+    // If there are no even nodes or no odd nodes
+    if (evenStart == nullptr || oddStart == nullptr) {
+        return;
+    }
+
+    // Connect the even list with the odd list
+    evenEnd->next = oddStart;
+    oddEnd->next = nullptr;
+
+    // Update the head pointer to the start of the even list
+    *head_ref = evenStart;
+}
