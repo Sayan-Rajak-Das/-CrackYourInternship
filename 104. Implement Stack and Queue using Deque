@@ -1,0 +1,138 @@
+// -- Question from GeeksforGeeks --
+
+
+// *---- Stack Implementation Using Deque ----*
+
+#include <iostream>
+#include <deque>
+
+class Stack {
+private:
+    std::deque<int> dq;
+
+public:
+    // Push element onto stack
+    void push(int x) {
+        dq.push_back(x);
+    }
+
+    // Pop element from stack
+    void pop() {
+        if (!dq.empty()) {
+            dq.pop_back();
+        } else {
+            std::cout << "Stack is empty" << std::endl;
+        }
+    }
+
+    // Get the top element of the stack
+    int top() {
+        if (!dq.empty()) {
+            return dq.back();
+        } else {
+            std::cout << "Stack is empty" << std::endl;
+            return -1;
+        }
+    }
+
+    // Check if stack is empty
+    bool empty() {
+        return dq.empty();
+    }
+
+    // Display the stack elements
+    void display() {
+        for (int i : dq) {
+            std::cout << i << " ";
+        }
+        std::cout << std::endl;
+    }
+};
+
+int main() {
+    Stack stack;
+    stack.push(1);
+    stack.push(2);
+    stack.push(3);
+    stack.display(); // Output: 1 2 3
+
+    stack.push(4);
+    stack.display(); // Output: 1 2 3 4
+
+    stack.pop();
+    stack.display(); // Output: 1 2 3
+
+    std::cout << "Top element: " << stack.top() << std::endl; // Output: 3
+
+    return 0;
+}
+
+
+--------------------------------------------------------------------------------****************------------------------------------------------------------------------------------
+
+
+// *---- Queue Implementation Using Deque ----*
+
+#include <iostream>
+#include <deque>
+
+class Queue {
+private:
+    std::deque<int> dq;
+
+public:
+    // Enqueue element into queue
+    void enqueue(int x) {
+        dq.push_back(x);
+    }
+
+    // Dequeue element from queue
+    void dequeue() {
+        if (!dq.empty()) {
+            dq.pop_front();
+        } else {
+            std::cout << "Queue is empty" << std::endl;
+        }
+    }
+
+    // Get the front element of the queue
+    int front() {
+        if (!dq.empty()) {
+            return dq.front();
+        } else {
+            std::cout << "Queue is empty" << std::endl;
+            return -1;
+        }
+    }
+
+    // Check if queue is empty
+    bool empty() {
+        return dq.empty();
+    }
+
+    // Display the queue elements
+    void display() {
+        for (int i : dq) {
+            std::cout << i << " ";
+        }
+        std::cout << std::endl;
+    }
+};
+
+int main() {
+    Queue queue;
+    queue.enqueue(1);
+    queue.enqueue(2);
+    queue.enqueue(3);
+    queue.display(); // Output: 1 2 3
+
+    queue.enqueue(4);
+    queue.display(); // Output: 1 2 3 4
+
+    queue.dequeue();
+    queue.display(); // Output: 2 3 4
+
+    std::cout << "Front element: " << queue.front() << std::endl; // Output: 2
+
+    return 0;
+}
