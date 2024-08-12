@@ -1,0 +1,44 @@
+class Solution {
+public:
+
+    int helper(const vector<int>& arr, int i, int j, vector<vector<int>>& dp,
+             const vector<vector<int>>& maxVal) {
+        if (i == j)
+            return 0;
+
+        if (dp[i][j] != -1)
+            return dp[i][j];
+
+        int minCost = INT_MAX;
+        for (int k = i; k < j; ++k) {
+            int leftCost = helper(arr, i, k, dp, maxVal);
+            int rightCost = helper(arr, k + 1, j, dp, maxVal);
+            int cost = leftCost + rightCost + maxVal[i][k] * maxVal[k + 1][j];
+            minCost = min(minCost, cost);
+        }
+
+        dp[i][j] = minCost;
+        return dp[i][j];
+    }
+
+
+    int mctFromLeafValues(vector<int>& arr) {
+        int n = arr.size();
+        vector<vector<int>> dp(n, vector<int>(n, -1));
+        vector<vector<int>> maxVal(n, vector<int>(n));
+
+        // Fill maxVal array
+        for (int i = 0; i < n; ++i)
+            maxVal[i][i] = arr[i];
+
+        for (int d = 1; d < n; ++d){
+            for (int i = 0; i + d < n; ++i) {
+                int j = i + d;
+                maxVal[i][j] = max(maxVal[i][j - 1], maxVal[i + 1][j]);
+            }
+        }
+
+        // Recursively calculate the minimum cost
+        return helper(arr, 0, n - 1, dp, maxVal);
+  }
+};
