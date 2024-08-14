@@ -1,0 +1,63 @@
+// -- Question from geeksforGeeks --
+
+class Solution
+{
+public:
+    vector<int> maxOfMin(int arr[], int n)
+    {
+        // Arrays to store the index of the previous and next smaller elements
+        vector<int> left(n + 1), right(n + 1);
+
+        stack<int> s;
+
+        // Fill elements of left[] (previous smaller elements)
+        for (int i = 0; i < n; i++)
+        {
+            while (!s.empty() && arr[s.top()] >= arr[i])
+                s.pop();
+
+            left[i] = (s.empty()) ? -1 : s.top();
+
+            s.push(i);
+        }
+
+        // Clear the stack for next calculation
+        while (!s.empty())
+            s.pop();
+
+        // Fill elements of right[] (next smaller elements)
+        for (int i = n - 1; i >= 0; i--)
+        {
+            while (!s.empty() && arr[s.top()] >= arr[i])
+                s.pop();
+
+            right[i] = (s.empty()) ? n : s.top();
+
+            s.push(i);
+        }
+
+      
+        vector<int> ans(n + 1, 0);
+
+        // Calculate the maximum of minimums for every window size
+        for (int i = 0; i < n; i++)
+        {
+            // Length of the window where arr[i] is the minimum
+            int len = right[i] - left[i] - 1;
+
+            // Update the result for this window length
+            ans[len] = max(ans[len], arr[i]);
+        }
+
+        // Fill the rest of the array
+        for (int i = n - 1; i >= 1; i--)
+            ans[i] = max(ans[i], ans[i + 1]);
+
+        // Return the answer for windows of size 1 to n
+        vector<int> result(n);
+        for (int i = 1; i <= n; i++)
+            result[i - 1] = ans[i];
+
+        return result;
+    }
+};
