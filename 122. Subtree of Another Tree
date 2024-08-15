@@ -1,0 +1,16 @@
+class Solution {
+public:
+    string preOrderTraversal(TreeNode* node){
+        if(!node)
+            return "null";
+
+        return "^" + to_string(node->val) + preOrderTraversal(node->left) + preOrderTraversal(node->right);
+    }
+
+    bool isSubtree(TreeNode* root, TreeNode* subRoot) {
+        string fullTree = preOrderTraversal(root);
+        string subTree = preOrderTraversal(subRoot);
+
+        return fullTree.find(subTree) != string::npos;
+    }
+};
