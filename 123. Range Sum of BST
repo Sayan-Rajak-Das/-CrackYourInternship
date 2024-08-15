@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int sum;
+
+    int preOrderTraversal(TreeNode* node, int low, int high, int &sum){
+        if(!node)
+            return 0;
+        
+        sum = (node->val >= low && node->val<=high) ? node->val + preOrderTraversal(node->left, low, high, sum) + preOrderTraversal(node->right, low, high, sum) : preOrderTraversal(node->left, low, high, sum) + preOrderTraversal(node->right, low, high, sum);
+
+        return sum;
+        
+    }
+
+    int rangeSumBST(TreeNode* root, int low, int high) {
+        sum = 0;
+        preOrderTraversal(root, low, high, sum);
+        return sum;
+    }
+};
