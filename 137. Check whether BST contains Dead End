@@ -1,0 +1,25 @@
+// -- Question from GeeksforGeeks --
+
+class Solution {
+  public:
+    bool checkDeadEnd(Node* node, int min_val, int max_val) {
+        // Base case: If the node is null, there's no dead end
+        if (node == nullptr) {
+            return false;
+        }
+
+        // If the current node's range has no room for new nodes, it's a dead end
+        if (min_val == max_val) {
+            return true;
+        }
+
+        // Recursively check the left and right subtrees
+        return (checkDeadEnd(node->left, min_val, node->data - 1) ||
+                checkDeadEnd(node->right, node->data + 1, max_val));
+    }
+
+    bool isDeadEnd(Node* root) {
+        // Start the recursive check with the full range [1, inf]
+        return checkDeadEnd(root, 1, INT_MAX);
+    }
+};
