@@ -1,0 +1,18 @@
+class Solution {
+public:
+    bool helper(TreeNode* node, int targetSum){
+        if(!node){
+            return false;
+        }
+
+        if(!node->left && !node->right) {
+            return targetSum == node->val;
+        }
+
+        return helper(node->left, (targetSum - node->val)) || helper(node->right, (targetSum - node->val));
+    }
+
+    bool hasPathSum(TreeNode* root, int targetSum) {
+        return helper(root, targetSum);
+    }
+};
