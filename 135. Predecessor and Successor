@@ -1,0 +1,41 @@
+// -- Question from GeeksforGeeks --
+
+class Solution {
+public:
+    void findPreSuc(Node* root, Node*& pre, Node*& suc, int key) {
+        if (!root) return;
+
+        // If the key is found
+        if (root->key == key) {
+            // The predecessor is the maximum value node in the left subtree
+            if (root->left) {
+                Node* temp = root->left;
+                while (temp->right)
+                    temp = temp->right;
+                pre = temp;
+            }
+
+            // The successor is the minimum value node in the right subtree
+            if (root->right) {
+                Node* temp = root->right;
+                while (temp->left)
+                    temp = temp->left;
+                suc = temp;
+            }
+            return;
+        }
+
+        // If the key is smaller than the root's key, go to the left subtree
+        if (key < root->key) {
+            // The current node could be the successor
+            suc = root;
+            findPreSuc(root->left, pre, suc, key);
+        }
+        // If the key is greater than the root's key, go to the right subtree
+        else {
+            // The current node could be the predecessor
+            pre = root;
+            findPreSuc(root->right, pre, suc, key);
+        }
+    }
+};
