@@ -1,0 +1,23 @@
+class Solution {
+public:
+    bool isValidBST(TreeNode* root) {
+        TreeNode* prev = nullptr;
+        return inorder(root, prev);
+    }
+
+private:
+    bool inorder(TreeNode* node, TreeNode*& prev){
+        if(!node)
+            return true;
+
+        if(!inorder(node->left, prev))
+            return false;
+
+        if(prev && prev->val >= node->val)
+            return false;
+        
+        prev = node;
+
+        return inorder(node->right, prev);
+    }
+};
