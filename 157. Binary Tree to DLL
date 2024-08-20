@@ -1,0 +1,35 @@
+// -- Question from GeeksforGeeks --
+
+class Solution {
+  public:
+    Node* head = nullptr;  // Head of the DLL
+    Node* prev = nullptr;  
+
+    // Function to convert binary tree to doubly linked list
+    void bToDLLUtil(Node* root) {
+        if (root == nullptr) return;
+
+        bToDLLUtil(root->left);
+
+
+        if (prev == nullptr) {
+            
+            head = root;
+            
+        } else {
+            // Adjust the pointers
+            root->left = prev;
+            prev->right = root;
+        }
+        prev = root;  
+
+    
+        bToDLLUtil(root->right);
+    }
+
+    // Function that converts the binary tree to DLL
+    Node* bToDLL(Node* root) {
+        bToDLLUtil(root);
+        return head;
+    }
+};
