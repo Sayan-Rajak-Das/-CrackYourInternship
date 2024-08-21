@@ -1,0 +1,47 @@
+class Solution {
+public:
+    vector<vector<int>> verticalTraversal(TreeNode* root) {
+        // Map to store column index and its corresponding list of nodes (row, value)
+        map<int, vector<pair<int, int>>> nodeMap;
+        queue<pair<TreeNode*, pair<int, int>>> q; // Node, (row, column)
+        
+        // Start BFS from the root
+        q.push({root, {0, 0}}); // {node, {row, col}}
+        
+        while (!q.empty()) {
+            auto [node, pos] = q.front();
+            q.pop();
+            int row = pos.first;
+            int col = pos.second;
+            
+            if (node) {
+                // Insert node into the map
+                nodeMap[col].push_back({row, node->val});
+                
+                // Enqueue left and right children with updated positions
+                q.push({node->left, {row + 1, col - 1}});
+                q.push({node->right, {row + 1, col + 1}});
+            }
+        }
+        
+        // Prepare result
+        vector<vector<int>> result;
+        
+        for (auto& [col, nodes] : nodeMap) {
+            // Sort nodes based on row first and then value if rows are the same
+            sort(nodes.begin(), nodes.end(), [](const pair<int, int>& a, const pair<int, int>& b) {
+                if (a.first == b.first)
+                    return a.second < b.second;
+                return a.first < b.first;
+            });
+            
+            vector<int> column;
+            for (auto& [row, value] : nodes) {
+                column.push_back(value);
+            }
+            result.push_back(column);
+        }
+        
+        return result;
+    }
+};
