@@ -1,0 +1,47 @@
+// -- Question from GeeksforGeeks --
+
+class Solution{
+    struct Info {
+        int size;      // Size of the subtree
+        int min;       // Minimum value in the subtree
+        int max;       // Maximum value in the subtree
+        int maxBSTSize; // Size of the largest BST
+        bool isBST;    // Is the subtree a BST
+    };
+    
+    Info largestBSTUtil(Node* root) {
+        if (!root) 
+            return {0, INT_MAX, INT_MIN, 0, true};
+        
+        if (!root->left && !root->right) 
+            return {1, root->data, root->data, 1, true};
+        
+        Info leftInfo = largestBSTUtil(root->left);
+        Info rightInfo = largestBSTUtil(root->right);
+        
+        Info curr;
+        curr.size = (1 + leftInfo.size + rightInfo.size);
+        
+        if (leftInfo.isBST && rightInfo.isBST && 
+            leftInfo.max < root->data && root->data < rightInfo.min) {
+            
+            curr.min = min(leftInfo.min, root->data);
+            curr.max = max(rightInfo.max, root->data);
+            
+            curr.maxBSTSize = curr.size;
+            curr.isBST = true;
+            
+            return curr;
+        }
+        
+        curr.maxBSTSize = max(leftInfo.maxBSTSize, rightInfo.maxBSTSize);
+        curr.isBST = false;
+        
+        return curr;
+    }
+
+    public:
+    int largestBst(Node *root) {
+        return largestBSTUtil(root).maxBSTSize;
+    }
+};
