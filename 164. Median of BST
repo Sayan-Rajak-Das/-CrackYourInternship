@@ -1,0 +1,39 @@
+// -- Question from GeeksforGeeks --
+
+// Function to perform inorder traversal and store the values in a vector
+void inorderTraversal(Node* root, vector<int> &inorder) {
+    if (root == NULL)
+        return;
+    
+    inorderTraversal(root->left, inorder);
+    
+   
+    inorder.push_back(root->data);
+    
+
+    inorderTraversal(root->right, inorder);
+}
+
+
+// Function to find the median of the BST
+float findMedian(Node *root) {
+    if (root == NULL)
+        return 0.0;
+    
+    // Vector to store the inorder traversal
+    vector<int> inorder;
+    
+    inorderTraversal(root, inorder);
+    
+    int n = inorder.size();
+    
+    // If number of nodes is odd, return the middle element
+    if (n % 2 == 1) {
+        return inorder[n / 2];
+    } 
+    // If number of nodes is even, return the average of the two middle elements
+    else {
+        return (inorder[n / 2 - 1] + inorder[n / 2]) / 2.0;
+    }
+}
+
