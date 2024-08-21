@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int cameras = 0;
+
+    int dfs(TreeNode* node) {
+        if (!node) return 2; 
+
+        int left = dfs(node->left);
+        int right = dfs(node->right);
+
+        // If any of the child nodes are not covered, place a camera at the current node
+        if (left == 0 || right == 0) {
+            cameras++;
+            return 1; 
+        }
+
+        // If either child has a camera, the current node is covered
+        if (left == 1 || right == 1) {
+            return 2; 
+        }
+
+        // If both children are covered but don't have a camera, the current node needs a camera
+        return 0; 
+    }
+
+    int minCameraCover(TreeNode* root) {
+        // If the root itself is not covered, place a camera
+        if (dfs(root) == 0) {
+            cameras++;
+        }
+        return cameras;
+    }
+};
