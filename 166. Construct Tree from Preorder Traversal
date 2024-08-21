@@ -1,0 +1,29 @@
+// -- Question from GeeksforGeeks --
+
+
+Node* constructTreeUtil(int& index, int pre[], char preLN[], int n) {
+  
+    if (index >= n) return nullptr;
+
+    // Create the current node
+    Node* node = new Node(pre[index]);
+
+    // Check if the current node is a leaf
+    if (preLN[index] == 'L') {
+        return node;
+    }
+
+    // Otherwise, it's a non-leaf node, so we need to construct its left and right children
+    index++; // Move to the next element in the preorder array for left child
+    node->left = constructTreeUtil(index, pre, preLN, n);
+    index++; // Move to the next element in the preorder array for right child
+    node->right = constructTreeUtil(index, pre, preLN, n);
+
+    return node;
+}
+
+// Function to construct the binary tree from preorder and preLN arrays
+Node* constructTree(int n, int pre[], char preLN[]) {
+    int index = 0; 
+    return constructTreeUtil(index, pre, preLN, n);
+}
