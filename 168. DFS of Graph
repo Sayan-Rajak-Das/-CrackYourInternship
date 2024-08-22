@@ -1,0 +1,29 @@
+// -- Question from GeeksforGeeks --
+
+class Solution {
+  public:
+    // Helper function to perform DFS recursively.
+    void dfs(int node, vector<int> adj[], vector<bool>& visited, vector<int>& dfsTraversal) {
+        // Mark the current node as visited and add it to the traversal result.
+        visited[node] = true;
+        dfsTraversal.push_back(node);
+
+        // Recur for all adjacent vertices
+        for (int neighbor : adj[node]) {
+            if (!visited[neighbor]) {
+                dfs(neighbor, adj, visited, dfsTraversal);
+            }
+        }
+    }
+
+    // Function to return a list containing the DFS traversal of the graph.
+    vector<int> dfsOfGraph(int V, vector<int> adj[]) {
+        vector<int> dfsTraversal;   // To store the DFS traversal
+        vector<bool> visited(V, false); // To track visited nodes
+
+        // Start DFS from node 0
+        dfs(0, adj, visited, dfsTraversal);
+
+        return dfsTraversal;
+    }
+};
