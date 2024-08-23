@@ -1,0 +1,60 @@
+// -- Question from GeeksforGeeks --
+
+class Solution 
+{
+public:
+    // Function to find out minimum steps Knight needs to reach target position.
+    int minStepToReachTarget(vector<int>& KnightPos, vector<int>& TargetPos, int N) 
+    {
+        // Directions for the Knight moves
+        vector<vector<int>> directions = {
+            {2, 1}, {2, -1}, {-2, 1}, {-2, -1},
+            {1, 2}, {1, -2}, {-1, 2}, {-1, -2}
+        };
+        
+        // Initialize the queue for BFS
+        queue<pair<int, int>> q;
+        q.push({KnightPos[0], KnightPos[1]});
+        
+        // Initialize a 2D vector for visited positions
+        vector<vector<bool>> visited(N + 1, vector<bool>(N + 1, false));
+        visited[KnightPos[0]][KnightPos[1]] = true;
+        
+        // Steps counter
+        int steps = 0;
+        
+        while (!q.empty()) 
+        {
+            int size = q.size();
+            steps++;
+            
+            for (int i = 0; i < size; i++) 
+            {
+                pair<int, int> current = q.front();
+                q.pop();
+                
+                int x = current.first;
+                int y = current.second;
+                
+                // Check if we've reached the target
+                if (x == TargetPos[0] && y == TargetPos[1])
+                    return steps - 1;
+                
+                // Explore all possible Knight moves
+                for (const auto& dir : directions) 
+                {
+                    int newX = x + dir[0];
+                    int newY = y + dir[1];
+                    
+                    if (newX > 0 && newX <= N && newY > 0 && newY <= N && !visited[newX][newY]) 
+                    {
+                        visited[newX][newY] = true;
+                        q.push({newX, newY});
+                    }
+                }
+            }
+        }
+        
+        return -1; // If somehow we cannot reach the target
+    }
+};
