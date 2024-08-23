@@ -1,0 +1,40 @@
+class Solution {
+public:
+    string decodeString(string s) {
+        stack<string> strStack;  // Stack to hold the strings
+        stack<int> numStack;     // Stack to hold the repeat counts
+        string currentString = "";
+        int currentNum = 0;
+        
+        for (char c : s) {
+            if (isdigit(c)) {
+                currentNum = currentNum * 10 + (c - '0');
+            } else if (c == '[') {
+                
+                // Push current string and number onto stacks
+                strStack.push(currentString);
+                numStack.push(currentNum);
+                
+                currentString = "";
+                currentNum = 0;
+
+            } else if (c == ']') {
+                // Pop the number and previous string
+                string prevString = strStack.top(); strStack.pop();
+                int repeatCount = numStack.top(); numStack.pop();
+                
+                // Repeat the current string and append it to the previous string
+                string decodedString = "";
+                for (int i = 0; i < repeatCount; ++i) {
+                    decodedString += currentString;
+                }
+                currentString = prevString + decodedString;
+            } else {
+                // Append the character to the current string
+                currentString += c;
+            }
+        }
+        
+        return currentString;
+    }
+};
