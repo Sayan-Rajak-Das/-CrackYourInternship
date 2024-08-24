@@ -1,0 +1,61 @@
+//  -- Question from GeeksforGeeks --
+
+
+class Solution
+{
+	void dfs(int node, vector<vector<int>>& adj, vector<bool>& visited, stack<int>& st) {
+        visited[node] = true;
+        for(auto neighbor : adj[node]) {
+            if(!visited[neighbor]) {
+                dfs(neighbor, adj, visited, st);
+            }
+        }
+        st.push(node);
+    }
+
+    void reverseDfs(int node, vector<vector<int>>& transpose, vector<bool>& visited) {
+        visited[node] = true;
+        for(auto neighbor : transpose[node]) {
+            if(!visited[neighbor]) {
+                reverseDfs(neighbor, transpose, visited);
+            }
+        }
+    }
+
+    public:
+    //Function to find number of strongly connected components in the graph.
+    int kosaraju(int V, vector<vector<int>>& adj)
+    {
+        stack<int> st;
+        vector<bool> visited(V, false);
+
+        // Step 1: Perform DFS and store vertices according to their finish times
+        for(int i = 0; i < V; i++) {
+            if(!visited[i]) {
+                dfs(i, adj, visited, st);
+            }
+        }
+
+        // Step 2: Create a reversed graph
+        vector<vector<int>> transpose(V);
+        for(int i = 0; i < V; i++) {
+            for(auto neighbor : adj[i]) {
+                transpose[neighbor].push_back(i);
+            }
+        }
+
+        // Step 3: Perform DFS on the transposed graph in the order of finishing times
+        fill(visited.begin(), visited.end(), false);
+        int sccCount = 0;
+        while(!st.empty()) {
+            int node = st.top();
+            st.pop();
+            if(!visited[node]) {
+                reverseDfs(node, transpose, visited);
+                sccCount++;
+            }
+        }
+
+        return sccCount;
+    }
+};
