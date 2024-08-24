@@ -1,0 +1,77 @@
+// -- Question from GeeksforGeeks --
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+// Function to check if the current color assignment is safe
+bool isSafe(int node, vector<vector<int>>& graph, vector<int>& color, int col) {
+    for (int i = 0; i < graph.size(); i++) {
+        // Check if any adjacent node has the same color
+        if (graph[node][i] && color[i] == col) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Recursive utility function to solve the graph coloring problem
+bool graphColoringUtil(vector<vector<int>>& graph, int m, vector<int>& color, int node) {
+    // If all vertices are assigned a color, return true
+    if (node == graph.size()) {
+        return true;
+    }
+
+    // Consider this vertex and try different colors
+    for (int i = 1; i <= m; i++) {
+        // Check if assignment of color i to vertex node is safe
+        if (isSafe(node, graph, color, i)) {
+            color[node] = i;
+
+            // Recur to assign colors to the rest of the vertices
+            if (graphColoringUtil(graph, m, color, node + 1)) {
+                return true;
+            }
+
+            // If assigning color i doesn't lead to a solution, remove it
+            color[node] = 0;
+        }
+    }
+
+    // If no color can be assigned to this vertex, return false
+    return false;
+}
+
+// Function to solve the m-coloring problem
+bool graphColoring(vector<vector<int>>& graph, int m) {
+    // Initialize all color assignments to 0 (no color)
+    vector<int> color(graph.size(), 0);
+
+    // Call the utility function to solve the problem
+    if (graphColoringUtil(graph, m, color, 0)) {
+        // If solution exists, print the color assignment
+        for (int i = 0; i < color.size(); i++) {
+            cout << "Vertex " << i << " --->  Color " << color[i] << endl;
+        }
+        return true;
+    }
+
+    // If no solution exists, print "No solution"
+    cout << "No solution exists" << endl;
+    return false;
+}
+
+int main() {
+    int n = 4; // Number of vertices
+    vector<vector<int>> graph = {
+        {0, 1, 1, 1},
+        {1, 0, 1, 0},
+        {1, 1, 0, 1},
+        {1, 0, 1, 0}
+    };
+    int m = 3; // Number of colors
+
+    graphColoring(graph, m);
+
+    return 0;
+}
