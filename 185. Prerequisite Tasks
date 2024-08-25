@@ -1,0 +1,43 @@
+// -- Question from GeeksforGeeks --
+
+class Solution {
+public:
+    bool isPossible(int N, int P, vector<pair<int, int>>& prerequisites) {
+        // Create an adjacency list
+        vector<vector<int>> adj(N);
+        vector<int> inDegree(N, 0);
+        
+        // Fill adjacency list and in-degree array
+        for (auto& pre : prerequisites) {
+            adj[pre.second].push_back(pre.first);
+            inDegree[pre.first]++;
+        }
+        
+        // Queue for nodes with in-degree 0
+        queue<int> q;
+        for (int i = 0; i < N; i++) {
+            if (inDegree[i] == 0) {
+                q.push(i);
+            }
+        }
+        
+        // Process the graph
+        int count = 0;
+        while (!q.empty()) {
+            int node = q.front();
+            q.pop();
+            count++;
+            
+            // Reduce the in-degree of neighboring nodes
+            for (int neighbor : adj[node]) {
+                inDegree[neighbor]--;
+                if (inDegree[neighbor] == 0) {
+                    q.push(neighbor);
+                }
+            }
+        }
+        
+        // If we processed all nodes, return true, otherwise false
+        return count == N;
+    }
+};
