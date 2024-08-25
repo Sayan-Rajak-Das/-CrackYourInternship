@@ -1,0 +1,43 @@
+// -- Question from GeeksforGeeks --
+
+class Solution {
+public:
+    // Function to return list containing vertices in Topological order.
+    vector<int> topoSort(int V, vector<int> adj[]) {
+        vector<int> inDegree(V, 0);
+        vector<int> topoOrder;
+        
+        // Compute the in-degree of each vertex
+        for (int i = 0; i < V; i++) {
+            for (int v : adj[i]) {
+                inDegree[v]++;
+            }
+        }
+        
+        // Initialize a queue and add all vertices with in-degree 0
+        queue<int> q;
+        for (int i = 0; i < V; i++) {
+            if (inDegree[i] == 0) {
+                q.push(i);
+            }
+        }
+        
+        // Perform BFS
+        while (!q.empty()) {
+            int u = q.front();
+            q.pop();
+            topoOrder.push_back(u);
+            
+            // Decrease the in-degree of all adjacent vertices
+            for (int v : adj[u]) {
+                inDegree[v]--;
+                // If in-degree becomes 0, add it to the queue
+                if (inDegree[v] == 0) {
+                    q.push(v);
+                }
+            }
+        }
+        
+        return topoOrder;
+    }
+};
