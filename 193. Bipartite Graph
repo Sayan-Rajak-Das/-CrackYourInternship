@@ -1,0 +1,41 @@
+// -- Question from GeeksforGeeks --
+
+class Solution {
+public:
+    bool isBipartite(int V, vector<int> adj[]) {
+        vector<int> color(V, -1);  // Initialize all vertices as uncolored
+        
+        // Try to color each component
+        for (int i = 0; i < V; i++) {
+            if (color[i] == -1) {  // Unvisited node
+                if (!bfsCheck(i, adj, color)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+private:
+    bool bfsCheck(int start, vector<int> adj[], vector<int>& color) {
+        queue<int> q;
+        q.push(start);
+        color[start] = 0;  // Assign first color as 0
+        
+        while (!q.empty()) {
+            int node = q.front();
+            q.pop();
+            
+            // Check all adjacent nodes
+            for (int neighbor : adj[node]) {
+                if (color[neighbor] == -1) {  // If uncolored, color with opposite color
+                    color[neighbor] = 1 - color[node];
+                    q.push(neighbor);
+                } else if (color[neighbor] == color[node]) {  // If neighbor has the same color, not bipartite
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+};
