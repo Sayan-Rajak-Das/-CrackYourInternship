@@ -1,0 +1,41 @@
+class Solution {
+public:
+    int longestIncreasingPath(vector<vector<int>>& matrix) {
+        if (matrix.empty() || matrix[0].empty()) return 0;
+        int m = matrix.size(), n = matrix[0].size();
+        vector<vector<int>> memo(m, vector<int>(n, -1));
+        int longestPath = 0;
+
+        // Explore every cell in the matrix
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                longestPath = max(longestPath, dfs(matrix, i, j, m, n, memo));
+            }
+        }
+
+        return longestPath;
+    }
+
+private:
+    int dfs(vector<vector<int>>& matrix, int i, int j, int m, int n, vector<vector<int>>& memo) {
+        if (memo[i][j] != -1) return memo[i][j];
+
+        // Possible directions: up, down, left, right
+        vector<pair<int, int>> directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        int maxLength = 1;
+
+        for (auto dir : directions) {
+            int x = i + dir.first;
+            int y = j + dir.second;
+
+            // Check if the move is valid and if the next cell has a greater value
+            if (x >= 0 && x < m && y >= 0 && y < n && matrix[x][y] > matrix[i][j]) {
+                int len = 1 + dfs(matrix, x, y, m, n, memo);
+                maxLength = max(maxLength, len);
+            }
+        }
+
+        memo[i][j] = maxLength;
+        return maxLength;
+    }
+};
