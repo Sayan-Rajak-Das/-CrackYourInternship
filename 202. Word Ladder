@@ -1,0 +1,42 @@
+class Solution {
+public:
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        unordered_set<string> wordSet(wordList.begin(), wordList.end());
+        
+        // If endWord is not in the word list, no transformation is possible
+        if (wordSet.find(endWord) == wordSet.end()) {
+            return 0;
+        }
+
+        queue<pair<string, int>> q; // Queue for BFS, storing word and current sequence length
+        q.push({beginWord, 1});
+
+        while (!q.empty()) {
+            auto [currentWord, length] = q.front();
+            q.pop();
+
+            // Try changing every character of the current word
+            for (int i = 0; i < currentWord.size(); ++i) {
+                string tempWord = currentWord;
+                
+                // Replace each character with every possible lowercase letter
+                for (char c = 'a'; c <= 'z'; ++c) {
+                    tempWord[i] = c;
+                    
+                    // If the modified word is the endWord, return the length of the sequence
+                    if (tempWord == endWord) {
+                        return length + 1;
+                    }
+
+                    // If the modified word is in the word set and hasn't been visited
+                    if (wordSet.find(tempWord) != wordSet.end()) {
+                        q.push({tempWord, length + 1});
+                        wordSet.erase(tempWord); // Mark this word as visited
+                    }
+                }
+            }
+        }
+
+        return 0; // If there's no valid transformation sequence
+    }
+};
