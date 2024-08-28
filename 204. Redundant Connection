@@ -1,0 +1,41 @@
+class Solution {
+public:
+    vector<int> parent;
+
+    vector<int> findRedundantConnection(vector<vector<int>>& edges) {
+        int n = edges.size();
+        parent.resize(n + 1);
+
+        // Initialize each node to be its own parent
+        for(int i = 1; i <= n; i++) {
+            parent[i] = i;
+        }
+
+        // Loop through all the edges
+        for(const auto& edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+            if(find(u) == find(v)) {
+                return edge;
+            }
+            unionSets(u, v);
+        }
+        return {};
+    }
+
+    int find(int node) {
+        while(parent[node] != node) {
+            node = parent[node];
+        }
+        return node;
+    }
+
+    void unionSets(int i, int j) {
+        int iRoot = find(i);
+        int jRoot = find(j);
+
+        if(iRoot != jRoot) {
+            parent[jRoot] = iRoot;
+        }
+    }
+};
