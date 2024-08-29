@@ -1,0 +1,38 @@
+// -- Question from GeeksforGeeks --
+
+class Solution{
+public:
+    vector<vector<string>> displayContacts(int n, string contact[], string s) {
+        vector<vector<string>> result;
+        
+        // Sort the contacts to ensure lexicographical order
+        sort(contact, contact + n);
+        
+        string prefix = "";
+        
+        for (int i = 0; i < s.length(); i++) {
+            prefix += s[i];
+            vector<string> matches;
+            
+            for (int j = 0; j < n; j++) {
+                // Check if the current contact starts with the current prefix
+                if (contact[j].substr(0, prefix.size()) == prefix) {
+                    // Add the contact to the matches list
+                    if(matches.empty() || matches.back() != contact[j]) {
+                        matches.push_back(contact[j]);
+                    }
+                }
+            }
+            
+            if (matches.empty()) {
+                // No matches found, add "0" to the result
+                result.push_back({"0"});
+            } else {
+                // Add the matches to the result
+                result.push_back(matches);
+            }
+        }
+        
+        return result;
+    }
+};
