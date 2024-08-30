@@ -1,0 +1,18 @@
+class Solution {
+public:
+    vector<int> mostCompetitive(vector<int>& nums, int k) {
+        vector<int> stack;
+        int to_remove = nums.size() - k;
+        
+        for (int num : nums) {
+            while (!stack.empty() && stack.back() > num && to_remove > 0) {
+                stack.pop_back();
+                to_remove--;
+            }
+            stack.push_back(num);
+        }
+        
+        stack.resize(k);
+        return stack;
+    }
+};
