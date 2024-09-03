@@ -1,0 +1,45 @@
+// -- Question from GeeksforGeeks --
+
+class Solution {
+  public:
+    long long getCount(int n) {
+        
+        vector<vector<int>> moves = {
+            {0, 8},       // for digit 0
+            {1, 2, 4},    // for digit 1
+            {2, 1, 3, 5}, // for digit 2
+            {3, 2, 6},    // for digit 3
+            {4, 1, 5, 7}, // for digit 4
+            {5, 2, 4, 6, 8}, // for digit 5
+            {6, 3, 5, 9}, // for digit 6
+            {7, 4, 8},    // for digit 7
+            {8, 5, 7, 9, 0}, // for digit 8
+            {9, 6, 8}     // for digit 9
+        };
+
+        vector<vector<long long>> dp(10, vector<long long>(n + 1, -1));
+
+        long long totalCount = 0;
+        for (int digit = 0; digit <= 9; ++digit) {
+            totalCount += countSequences(digit, n, dp, moves);
+        }
+        
+        return totalCount;
+    }
+
+private:
+    long long countSequences(int digit, int length, vector<vector<long long>>& dp, vector<vector<int>>& moves) {
+     
+        if (length == 1) return 1LL;
+        
+        if (dp[digit][length] != -1) return dp[digit][length];
+
+
+        long long count = 0;
+        for (int move : moves[digit]) {
+            count += countSequences(move, length - 1, dp, moves);
+        }
+
+        return dp[digit][length] = count;
+    }
+};
