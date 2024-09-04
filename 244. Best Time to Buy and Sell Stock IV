@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int maxProfit(int k, vector<int>& prices) {
+        vector<vector<vector<int>>> dp(prices.size(), vector<vector<int>>(k+1, vector<int>(2, -1)));
+        
+        return helper(prices, 0, k, 0, dp);
+    }
+    
+    int helper(vector<int>& prices, int day, int transactionsLeft, int holding, vector<vector<vector<int>>>& dp) {
+        if (day == prices.size() || transactionsLeft == 0) return 0; 
+        
+
+        if (dp[day][transactionsLeft][holding] != -1) return dp[day][transactionsLeft][holding];
+        
+        
+        int skip = helper(prices, day + 1, transactionsLeft, holding, dp);
+        
+        if (holding) { // If holding a stock, can sell
+            int sell = prices[day] + helper(prices, day + 1, transactionsLeft - 1, 0, dp);
+            dp[day][transactionsLeft][holding] = max(skip, sell);
+        } 
+        else { // If not holding a stock, can buy
+            int buy = -prices[day] + helper(prices, day + 1, transactionsLeft, 1, dp);
+            dp[day][transactionsLeft][holding] = max(skip, buy);
+        }
+        
+        return dp[day][transactionsLeft][holding];
+    }
+};
