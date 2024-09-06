@@ -1,0 +1,78 @@
+// -- Question from Sphere Online Judge --
+
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <functional> // For std::greater
+
+using namespace std;
+
+int minimalCost(int m, int n, vector<int>& verticalCosts, vector<int>& horizontalCosts) {
+    // Create a max-heap (priority queue)
+    priority_queue<int> pq;
+
+    // Add all vertical and horizontal costs to the heap
+    for (int cost : verticalCosts) {
+        pq.push(cost);
+    }
+    for (int cost : horizontalCosts) {
+        pq.push(cost);
+    }
+
+    // Track the number of vertical and horizontal segments
+    int verticalCount = 1;
+    int horizontalCount = 1;
+
+    int totalCost = 0;
+
+    // Process all costs from the max-heap
+    while (!pq.empty()) {
+        int cost = pq.top();
+        pq.pop();
+
+        if (verticalCount <= horizontalCount) {
+            // Apply horizontal break
+            totalCost += cost * verticalCount;
+            horizontalCount++;
+        } else {
+            // Apply vertical break
+            totalCost += cost * horizontalCount;
+            verticalCount++;
+        }
+    }
+
+    return totalCost;
+}
+
+int main() {
+    int t;
+    cin >> t;
+    cin.ignore(); // To ignore the newline character after the number of test cases
+
+    while (t--) {
+        if (t > 0) {
+            cin.ignore(); // Ignore the blank line between test cases
+        }
+
+        int m, n;
+        cin >> m >> n;
+        cin.ignore(); // To ignore the newline character after m and n
+
+        vector<int> verticalCosts(m - 1);
+        vector<int> horizontalCosts(n - 1);
+
+        for (int i = 0; i < m - 1; ++i) {
+            cin >> verticalCosts[i];
+        }
+        cin.ignore(); // To ignore the newline character after vertical costs
+
+        for (int i = 0; i < n - 1; ++i) {
+            cin >> horizontalCosts[i];
+        }
+
+        int result = minimalCost(m, n, verticalCosts, horizontalCosts);
+        cout << result << endl;
+    }
+
+    return 0;
+}
