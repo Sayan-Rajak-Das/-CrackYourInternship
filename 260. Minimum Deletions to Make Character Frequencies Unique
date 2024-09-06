@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int minDeletions(string s) {
+        // Step 1: Count the frequency of each character
+        vector<int> freq(26, 0);
+        for (char c : s) {
+            freq[c - 'a']++;
+        }
+        
+        // Step 2: Use a set to track already used frequencies
+        unordered_set<int> usedFrequencies;
+        int deletions = 0;
+        
+        // Step 3: For each character frequency, reduce it if necessary to make it unique
+        for (int f : freq) {
+            while (f > 0 && usedFrequencies.find(f) != usedFrequencies.end()) {
+                f--;  // Reduce frequency
+                deletions++;  // Count deletions
+            }
+            if (f > 0) {
+                usedFrequencies.insert(f);  // Mark this frequency as used
+            }
+        }
+        
+        return deletions;
+    }
+};
