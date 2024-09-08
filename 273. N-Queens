@@ -1,0 +1,41 @@
+class Solution {
+public:
+    vector<vector<string>> result;  
+
+    void backtrack(int n, int row, vector<string>& board, vector<bool>& cols, vector<bool>& leftDiag, vector<bool>& rightDiag) {
+        if (row == n) {
+            result.push_back(board);  
+            return;
+        }
+
+        for (int col = 0; col < n; col++) {
+            // Check if the column or the diagonals are already under attack
+            if (cols[col] || leftDiag[row - col + n - 1] || rightDiag[row + col]) {
+                continue;
+            }
+
+            // Place the queen at (row, col)
+            board[row][col] = 'Q';
+            cols[col] = leftDiag[row - col + n - 1] = rightDiag[row + col] = true;
+
+            // Recur for the next row
+            backtrack(n, row + 1, board, cols, leftDiag, rightDiag);
+
+            // Backtrack by removing the queen from (row, col)
+            board[row][col] = '.';
+            cols[col] = leftDiag[row - col + n - 1] = rightDiag[row + col] = false;
+        }
+    }
+
+    vector<vector<string>> solveNQueens(int n) {
+        vector<string> board(n, string(n, '.'));  
+        vector<bool> cols(n, false);              // Keep track of attacked columns
+        vector<bool> leftDiag(2 * n - 1, false);  // Keep track of attacked left diagonals
+        vector<bool> rightDiag(2 * n - 1, false); // Keep track of attacked right diagonals
+
+
+        backtrack(n, 0, board, cols, leftDiag, rightDiag);
+
+        return result;
+    }
+};
