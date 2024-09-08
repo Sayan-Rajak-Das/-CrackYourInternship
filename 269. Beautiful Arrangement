@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int count = 0;
+
+    void backtrack(int n, int idx, vector<bool>& visited){
+        if(idx > n){
+            count++;
+            return;
+        }
+
+        for(int i=1; i<=n; i++){
+            if(!visited[i] && (i % idx == 0 || idx%i == 0)){
+                visited[i] = true;
+                backtrack(n, idx+1, visited);
+                visited[i] = false;
+            }
+        }
+    }
+
+    int countArrangement(int n) {
+        vector<bool> visited(n+1, false);
+
+        backtrack(n, 1, visited);
+        return count;
+    }
+};
