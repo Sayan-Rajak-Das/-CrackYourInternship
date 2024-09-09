@@ -1,0 +1,41 @@
+// -- Question from GeeksforGeeks --
+
+class Solution
+{
+    public:
+    void findMaxUtil(string& str, int k, string& maxStr, int index) {
+        if (k == 0) return;
+
+        int n = str.length();
+        char maxChar = str[index];
+
+        for (int i = index + 1; i < n; i++) {
+            if (str[i] > maxChar) {
+                maxChar = str[i];
+            }
+        }
+
+        if (maxChar != str[index]) k--;
+
+        for (int i = index; i < n; i++) {
+            if (str[i] == maxChar) {
+                swap(str[index], str[i]);
+
+                if (str.compare(maxStr) > 0) {
+                    maxStr = str;
+                }
+
+                findMaxUtil(str, k, maxStr, index + 1);
+
+                swap(str[index], str[i]);
+            }
+        }
+    }
+
+    string findMaximumNum(string str, int k)
+    {
+        string maxStr = str;
+        findMaxUtil(str, k, maxStr, 0);
+        return maxStr;
+    }
+};
