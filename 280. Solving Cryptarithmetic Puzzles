@@ -1,0 +1,61 @@
+// -- Question from GeeksforGeeks --
+
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <unordered_set>
+using namespace std;
+
+// Function to convert a word into its numeric value
+int getValue(const string& word, const unordered_map<char, int>& mapping) {
+    int value = 0;
+    for (char ch : word) {
+        value = value * 10 + mapping.at(ch);  // Multiply current value by 10 and add the digit
+    }
+    return value;
+}
+
+// Recursive function to solve the puzzle
+bool solveCryptarithm(int idx, const vector<char>& letters, unordered_map<char, int>& mapping, unordered_set<int>& usedDigits) {
+    // Base case: if all letters are assigned, check the solution
+    if (idx == letters.size()) {
+        int send = getValue("SEND", mapping);
+        int more = getValue("MORE", mapping);
+        int money = getValue("MONEY", mapping);
+        return send + more == money;  // Check if the equation holds
+    }
+
+    // Recursive case: assign a digit to the current letter
+    char currentChar = letters[idx];
+    for (int digit = 0; digit <= 9; ++digit) {
+        if (usedDigits.find(digit) == usedDigits.end()) {  // Check if digit is not already used
+            mapping[currentChar] = digit;
+            usedDigits.insert(digit);  // Mark digit as used
+
+            // Recursive call for the next letter
+            if (solveCryptarithm(idx + 1, letters, mapping, usedDigits)) return true;
+
+            // Backtrack
+            mapping.erase(currentChar);
+            usedDigits.erase(digit);
+        }
+    }
+    return false;  // Trigger backtracking
+}
+
+int main() {
+    vector<char> letters = {'S', 'E', 'N', 'D', 'M', 'O', 'R', 'Y'};
+    unordered_map<char, int> mapping;
+    unordered_set<int> usedDigits;
+
+    if (solveCryptarithm(0, letters, mapping, usedDigits)) {
+        cout << "Solution found:\n";
+        for (const auto& pair : mapping) {
+            cout << pair.first << " = " << pair.second << endl;
+        }
+    } else {
+        cout << "No solution exists.\n";
+    }
+
+    return 0;
+}
