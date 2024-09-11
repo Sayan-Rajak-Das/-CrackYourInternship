@@ -1,0 +1,42 @@
+// -- Question from GeeksforGeeks --
+
+class Solution {
+  public:
+    bool isPalindrome(string S, int left, int right) {
+        while(left < right) {
+            if(S[left] != S[right])
+                return false;
+            
+            left++;
+            right--;
+        }
+        return true;
+    }
+  
+  
+    void backtrack(string S, int start, vector<string>& curr, vector<vector<string>>& result) {
+        if(start == S.length()){
+            result.push_back(curr);
+            return;
+        }
+        
+            
+        for(int i=start; i<S.length(); i++) {
+            if(isPalindrome(S, start, i)) {
+                curr.push_back(S.substr(start, i - start + 1));
+                backtrack(S, i+1, curr, result);
+                curr.pop_back();
+            }
+        }
+            
+    }
+    
+  
+    vector<vector<string>> allPalindromicPerms(string S) {
+        vector<vector<string>> result;
+        vector<string> curr;
+        
+        backtrack(S, 0, curr, result);
+        return result;
+    }
+};
